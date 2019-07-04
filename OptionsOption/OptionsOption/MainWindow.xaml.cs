@@ -1,17 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Net;
+using System.IO;
+using System.Text;
+
 
 namespace OptionsOption
 {
@@ -22,7 +14,16 @@ namespace OptionsOption
     {
         public MainWindow()
         {
-            InitializeComponent();
+            var request = (HttpWebRequest)WebRequest.Create("https://sandbox.tradier.com/v1/markets/quotes?symbols=AAPL,VXX190517P00016000");
+            request.Method = "GET";
+            request.Headers["Authorization"] = "Bearer <token>";
+            request.Accept = "application/json";
+
+            var response = (HttpWebResponse)request.GetResponse();
+
+            Console.WriteLine(response.StatusCode);
+            var responseString = new StreamReader(response.GetResponseStream()).ReadToEnd();
+            Console.WriteLine(responseString);
         }
     }
 }
